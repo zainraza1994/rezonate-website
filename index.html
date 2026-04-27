@@ -45,7 +45,7 @@
     .hero-bg-grid { position: absolute; inset: 0; background-image: linear-gradient(to right, rgba(42,77,168,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(42,77,168,0.05) 1px, transparent 1px); background-size: 64px 64px; pointer-events: none; }
     .hero-accent { position: absolute; top: -200px; right: -200px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(42,77,168,0.08) 0%, transparent 70%); pointer-events: none; }
     .hero-accent-2 { position: absolute; bottom: -100px; left: -100px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(214,48,40,0.06) 0%, transparent 70%); pointer-events: none; }
-    .hero-inner { position: relative; max-width: 860px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; align-items: flex-start; }
+    .hero-inner { position: relative; max-width: 1200px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; align-items: flex-start; }
     .hero-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--red); margin-bottom: 24px; }
     .hero-label::before { content: ''; display: block; width: 24px; height: 2px; background: var(--red); }
     .hero h1 { font-family: var(--font-head); font-weight: 800; font-size: clamp(48px,6vw,78px); line-height: 1.02; letter-spacing: -2px; color: var(--dark); margin-bottom: 28px; }
@@ -57,61 +57,44 @@
     .btn-secondary { display: inline-flex; align-items: center; gap: 8px; color: var(--dark); font-weight: 500; font-size: 15px; padding: 16px 0; border-bottom: 2px solid var(--dark); transition: all 0.2s ease; }
     .btn-secondary:hover { color: var(--navy); border-color: var(--navy); gap: 14px; }
     /* SCROLL JOURNEY */
-    .journey-track {
+    #journeyWrapper {
       position: fixed;
-      left: 24px;
+      left: 0;
       top: 0;
-      bottom: 0;
-      width: 20px;
+      width: 56px;
+      height: 100vh;
       z-index: 50;
       pointer-events: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      overflow: visible;
+      opacity: 0;
+      transition: opacity 0.6s ease;
     }
-    .journey-line {
+    #journeySvg {
       position: absolute;
+      top: 0; left: 0;
+      overflow: visible;
+    }
+    #journeyPin {
+      position: absolute;
+      left: 0; top: 0;
+      transform: translate(-50%, -90%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    #journeyLabel {
+      position: absolute;
+      left: 44px;
       top: 0;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 1px;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        rgba(42,77,168,0.25) 0px,
-        rgba(42,77,168,0.25) 4px,
-        transparent 4px,
-        transparent 10px
-      );
-    }
-    .journey-progress {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 1px;
-      background-image: repeating-linear-gradient(
-        to bottom,
-        var(--navy) 0px,
-        var(--navy) 4px,
-        transparent 4px,
-        transparent 10px
-      );
-      height: 0%;
-      transition: height 0.1s linear;
-    }
-    .journey-pin {
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%) translateY(-50%);
-      top: 0%;
-      transition: top 0.4s var(--ease);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .journey-pin svg {
-      filter: drop-shadow(0 2px 4px rgba(214,48,40,0.3));
+      transform: translateY(-50%);
+      white-space: nowrap;
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--navy);
+      opacity: 0;
+      transition: opacity 0.35s ease;
     }
 
     /* CLIENTS TICKER */
@@ -260,16 +243,19 @@
 
   <nav id="nav">
 
-  <!-- SCROLL JOURNEY TRACK -->
-  <div class="journey-track" id="journeyTrack">
-    <div class="journey-line"></div>
-    <div class="journey-progress" id="journeyProgress"></div>
-    <div class="journey-pin" id="journeyPin">
-      <svg width="14" height="20" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- SCROLL JOURNEY -->
+  <div id="journeyWrapper">
+    <svg id="journeySvg" xmlns="http://www.w3.org/2000/svg">
+      <path id="journeyGhost" fill="none" stroke="rgba(42,77,168,0.15)" stroke-width="2" stroke-dasharray="5 8" stroke-linecap="round"/>
+      <path id="journeyDrawn" fill="none" stroke="rgba(42,77,168,0.6)" stroke-width="2" stroke-dasharray="5 8" stroke-linecap="round"/>
+    </svg>
+    <div id="journeyPin">
+      <svg width="26" height="36" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 3px 6px rgba(214,48,40,0.35));">
         <path d="M7 0C3.13 0 0 3.13 0 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#D63028"/>
         <circle cx="7" cy="7" r="2.5" fill="white"/>
       </svg>
     </div>
+    <div id="journeyLabel"></div>
   </div>
     <div class="logo-text">Re<span class="z-accent">z</span>onate</div>
     <ul class="nav-links">
@@ -695,23 +681,125 @@
       nav.classList.toggle('scrolled', window.scrollY > 20);
     });
 
-    // SCROLL JOURNEY
-    const journeyPin      = document.getElementById('journeyPin');
-    const journeyProgress = document.getElementById('journeyProgress');
-    const sections = ['home', 'about', 'services', 'work', 'approach', 'sectors', 'contact'];
+    // ── SCROLL JOURNEY ──────────────────────────────
+    const wrapper   = document.getElementById('journeyWrapper');
+    const svg       = document.getElementById('journeySvg');
+    const ghost     = document.getElementById('journeyGhost');
+    const drawn     = document.getElementById('journeyDrawn');
+    const pin       = document.getElementById('journeyPin');
+    const labelEl   = document.getElementById('journeyLabel');
 
-    function updateJourney() {
-      const scrollTop    = window.scrollY;
-      const docHeight    = document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPct    = Math.min(Math.max(scrollTop / docHeight, 0), 1);
-      // clamp pin between 5% and 95% of viewport
-      const pinTop = 5 + scrollPct * 90;
-      journeyPin.style.top      = pinTop + '%';
-      journeyProgress.style.height = pinTop + '%';
+    const cx = 28; // horizontal centre of the 56px track
+    const amp = 11; // wave amplitude in px
+    const period = 140; // wave period in px
+
+    const sectionDefs = [
+      { id: 'about',    label: 'About' },
+      { id: 'services', label: 'Services' },
+      { id: 'work',     label: 'Work' },
+      { id: 'approach', label: 'Approach' },
+      { id: 'sectors',  label: 'Experience' },
+      { id: 'contact',  label: 'Contact' },
+    ];
+
+    let totalLength = 0;
+    let startY = 0;
+    let journeyReady = false;
+
+    function buildWavePath(sy, ey) {
+      let d = `M ${cx} ${sy}`;
+      let y = sy;
+      let dir = 1;
+      while (y < ey) {
+        const nextY = Math.min(y + period / 2, ey);
+        const ctrlX = cx + amp * dir;
+        const ctrlY = (y + nextY) / 2;
+        d += ` Q ${ctrlX} ${ctrlY} ${cx} ${nextY}`;
+        y = nextY;
+        dir *= -1;
+      }
+      return d;
     }
 
+    function initJourney() {
+      const vh = window.innerHeight;
+      svg.setAttribute('width', '56');
+      svg.setAttribute('height', vh);
+
+      // Start path from the hero h1 position on screen
+      const h1 = document.querySelector('.hero h1');
+      const h1Rect = h1.getBoundingClientRect();
+      startY = h1Rect.top + h1Rect.height * 0.5;
+
+      const pathD = buildWavePath(startY, vh * 1.0);
+      ghost.setAttribute('d', pathD);
+      drawn.setAttribute('d', pathD);
+
+      totalLength = drawn.getTotalLength();
+      drawn.style.strokeDasharray = totalLength;
+      drawn.style.strokeDashoffset = totalLength;
+
+      journeyReady = true;
+    }
+
+    let lastLabel = '';
+
+    function updateJourney() {
+      if (!journeyReady) return;
+
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPct = Math.min(Math.max(scrollTop / docHeight, 0), 1);
+
+      // Only show after a small scroll
+      if (scrollTop < 60) {
+        wrapper.style.opacity = '0';
+        pin.style.opacity = '0';
+        labelEl.style.opacity = '0';
+        return;
+      }
+
+      wrapper.style.opacity = '1';
+
+      const drawLen = scrollPct * totalLength;
+      drawn.style.strokeDashoffset = totalLength - drawLen;
+
+      // Move pin to tip of drawn path
+      const safeLen = Math.max(1, Math.min(drawLen, totalLength - 1));
+      const pt = drawn.getPointAtLength(safeLen);
+      pin.style.left = pt.x + 'px';
+      pin.style.top  = pt.y + 'px';
+      pin.style.opacity = drawLen > 4 ? '1' : '0';
+
+      // Update label position
+      labelEl.style.top = pt.y + 'px';
+
+      // Find current section
+      let currentLabel = '';
+      for (const s of sectionDefs) {
+        const el = document.getElementById(s.id);
+        if (el && scrollTop >= el.offsetTop - window.innerHeight * 0.45) {
+          currentLabel = s.label;
+        }
+      }
+
+      if (currentLabel !== lastLabel) {
+        labelEl.style.opacity = '0';
+        setTimeout(() => {
+          labelEl.textContent = currentLabel;
+          labelEl.style.opacity = currentLabel ? '1' : '0';
+        }, 180);
+        lastLabel = currentLabel;
+      }
+    }
+
+    // Initialise after fonts / layout settle
+    window.addEventListener('load', () => {
+      initJourney();
+      updateJourney();
+    });
     window.addEventListener('scroll', updateJourney, { passive: true });
-    updateJourney();
+    window.addEventListener('resize', initJourney);
 
     // FADE IN
     const observer = new IntersectionObserver((entries) => {
