@@ -246,8 +246,8 @@
   <!-- SCROLL JOURNEY -->
   <div id="journeyWrapper">
     <svg id="journeySvg" xmlns="http://www.w3.org/2000/svg">
-      <path id="journeyGhost" fill="none" stroke="rgba(42,77,168,0.15)" stroke-width="2" stroke-dasharray="5 8" stroke-linecap="round"/>
-      <path id="journeyDrawn" fill="none" stroke="rgba(42,77,168,0.6)" stroke-width="2" stroke-dasharray="5 8" stroke-linecap="round"/>
+      <path id="journeyGhost" fill="none" stroke="rgba(42,77,168,0.18)" stroke-width="2.5" stroke-dasharray="2 11" stroke-linecap="round"/>
+      <path id="journeyDrawn" fill="none" stroke="#2A4DA8" stroke-width="2.5" stroke-dasharray="2 11" stroke-linecap="round"/>
     </svg>
     <div id="journeyPin">
       <svg width="26" height="36" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 3px 6px rgba(214,48,40,0.35));">
@@ -274,7 +274,7 @@
     <div class="hero-inner">
       <div class="hero-left">
         <div class="hero-label">Strategic &amp; Service Design</div>
-        <h1>Design services that <span class="accent">resonate.</span></h1>
+        <h1>Design services<br>that <span class="accent">resonate.</span></h1>
         <p class="hero-sub">We design and deliver impactful services that put innovation and people at the heart — creating simplicity amongst complexity, across public and private sector.</p>
         <div class="hero-actions">
           <a href="#work" class="btn-primary">
@@ -682,16 +682,16 @@
     });
 
     // ── SCROLL JOURNEY ──────────────────────────────
-    const wrapper   = document.getElementById('journeyWrapper');
-    const svg       = document.getElementById('journeySvg');
-    const ghost     = document.getElementById('journeyGhost');
-    const drawn     = document.getElementById('journeyDrawn');
-    const pin       = document.getElementById('journeyPin');
-    const labelEl   = document.getElementById('journeyLabel');
+    const wrapper  = document.getElementById('journeyWrapper');
+    const svg      = document.getElementById('journeySvg');
+    const ghost    = document.getElementById('journeyGhost');
+    const drawn    = document.getElementById('journeyDrawn');
+    const pin      = document.getElementById('journeyPin');
+    const labelEl  = document.getElementById('journeyLabel');
 
-    const cx = 28; // horizontal centre of the 56px track
-    const amp = 11; // wave amplitude in px
-    const period = 140; // wave period in px
+    const cx     = 28;  // horizontal centre of 56px track
+    const amp    = 12;  // wave amplitude px
+    const period = 130; // wave period px
 
     const sectionDefs = [
       { id: 'about',    label: 'About' },
@@ -699,23 +699,24 @@
       { id: 'work',     label: 'Work' },
       { id: 'approach', label: 'Approach' },
       { id: 'sectors',  label: 'Experience' },
-      { id: 'contact',  label: 'Contact' },
     ];
 
-    let totalLength = 0;
-    let startY = 0;
+    let totalLength  = 0;
+    let startY       = 0;
+    let contactStart = 0; // scroll % where contact section begins
     let journeyReady = false;
+    let lastLabel    = '';
 
     function buildWavePath(sy, ey) {
-      let d = `M ${cx} ${sy}`;
-      let y = sy;
+      let d   = `M ${cx} ${sy}`;
+      let y   = sy;
       let dir = 1;
       while (y < ey) {
-        const nextY = Math.min(y + period / 2, ey);
-        const ctrlX = cx + amp * dir;
-        const ctrlY = (y + nextY) / 2;
+        const nextY  = Math.min(y + period / 2, ey);
+        const ctrlX  = cx + amp * dir;
+        const ctrlY  = (y + nextY) / 2;
         d += ` Q ${ctrlX} ${ctrlY} ${cx} ${nextY}`;
-        y = nextY;
+        y   = nextY;
         dir *= -1;
       }
       return d;
@@ -723,26 +724,39 @@
 
     function initJourney() {
       const vh = window.innerHeight;
-      svg.setAttribute('width', '56');
+      svg.setAttribute('width',  '56');
       svg.setAttribute('height', vh);
 
-      // Start path from the hero h1 position on screen
-      const h1 = document.querySelector('.hero h1');
+      // Start from h1 heading position
+      const h1     = document.querySelector('.hero h1');
       const h1Rect = h1.getBoundingClientRect();
-      startY = h1Rect.top + h1Rect.height * 0.5;
+      startY       = h1Rect.top + h1Rect.height * 0.4;
 
-      const pathD = buildWavePath(startY, vh * 1.0);
+      // Path runs from heading to near bottom of viewport
+      const endY   = vh * 0.94;
+      const pathD  = buildWavePath(startY, endY);
+
       ghost.setAttribute('d', pathD);
       drawn.setAttribute('d', pathD);
 
       totalLength = drawn.getTotalLength();
-      drawn.style.strokeDasharray = totalLength;
-      drawn.style.strokeDashoffset = totalLength;
+      // Start with the FULL path drawn — trail runs from top downward
+      // We'll use clipPath logic via strokeDashoffset differently:
+      // dashoffset = 0 → fully drawn; we'll instead control via a different approach
+      // Actually: draw from START to pin position = dashoffset trick
+      // offset trick: offset = totalLength means nothing drawn at start
+      drawn.style.strokeDasharray  = totalLength;
+      drawn.style.strokeDashoffset = totalLength; // nothing shown yet
+
+      // Calculate where contact section starts as a scroll fraction
+      const docHeight    = document.documentElement.scrollHeight - vh;
+      const contactEl    = document.getElementById('contact');
+      contactStart       = contactEl
+        ? Math.max(0, (contactEl.offsetTop - vh) / docHeight)
+        : 0.88;
 
       journeyReady = true;
     }
-
-    let lastLabel = '';
 
     function updateJourney() {
       if (!journeyReady) return;
@@ -751,30 +765,43 @@
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPct = Math.min(Math.max(scrollTop / docHeight, 0), 1);
 
-      // Only show after a small scroll
+      // Hide before any scroll
       if (scrollTop < 60) {
         wrapper.style.opacity = '0';
-        pin.style.opacity = '0';
+        pin.style.opacity     = '0';
         labelEl.style.opacity = '0';
         return;
       }
 
-      wrapper.style.opacity = '1';
+      // Fade out as contact section approaches
+      const fadeStart  = contactStart - 0.08;
+      const fadeEnd    = contactStart;
+      let wrapperAlpha = 1;
+      if (scrollPct >= fadeStart) {
+        wrapperAlpha = Math.max(0, 1 - (scrollPct - fadeStart) / (fadeEnd - fadeStart));
+      }
+      wrapper.style.opacity = wrapperAlpha;
 
-      const drawLen = scrollPct * totalLength;
+      if (wrapperAlpha === 0) return;
+
+      // How far through the journey (0→1), capped at contactStart
+      const journeyPct = Math.min(scrollPct / contactStart, 1);
+      const drawLen    = journeyPct * totalLength;
+
+      // Trail: reveal from the START up to current pin position
+      // dashoffset = totalLength - drawLen draws from beginning to drawLen
       drawn.style.strokeDashoffset = totalLength - drawLen;
 
-      // Move pin to tip of drawn path
+      // Move pin to the tip of the drawn trail
       const safeLen = Math.max(1, Math.min(drawLen, totalLength - 1));
-      const pt = drawn.getPointAtLength(safeLen);
-      pin.style.left = pt.x + 'px';
-      pin.style.top  = pt.y + 'px';
-      pin.style.opacity = drawLen > 4 ? '1' : '0';
+      const pt      = drawn.getPointAtLength(safeLen);
+      pin.style.left    = pt.x + 'px';
+      pin.style.top     = pt.y + 'px';
+      pin.style.opacity = drawLen > 6 ? '1' : '0';
 
-      // Update label position
+      // Update label position and text
       labelEl.style.top = pt.y + 'px';
 
-      // Find current section
       let currentLabel = '';
       for (const s of sectionDefs) {
         const el = document.getElementById(s.id);
@@ -786,20 +813,19 @@
       if (currentLabel !== lastLabel) {
         labelEl.style.opacity = '0';
         setTimeout(() => {
-          labelEl.textContent = currentLabel;
+          labelEl.textContent   = currentLabel;
           labelEl.style.opacity = currentLabel ? '1' : '0';
         }, 180);
         lastLabel = currentLabel;
       }
     }
 
-    // Initialise after fonts / layout settle
     window.addEventListener('load', () => {
       initJourney();
       updateJourney();
     });
     window.addEventListener('scroll', updateJourney, { passive: true });
-    window.addEventListener('resize', initJourney);
+    window.addEventListener('resize', () => { initJourney(); updateJourney(); });
 
     // FADE IN
     const observer = new IntersectionObserver((entries) => {
