@@ -6,7 +6,7 @@
   <title>Rezonate — Strategic &amp; Service Design</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -18,7 +18,7 @@
       --mid:       #555563;
       --border:    #E0DFD9;
       --light-blue:#EEF2FB;
-      --font-head: 'Syne', sans-serif;
+      --font-head: 'Epilogue', sans-serif;
       --font-body: 'DM Sans', sans-serif;
       --ease:      cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -27,14 +27,18 @@
     a { text-decoration: none; color: inherit; }
 
     /* NAV */
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 72px; background: rgba(247,246,242,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid transparent; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
-    nav.scrolled { border-color: var(--border); box-shadow: 0 2px 24px rgba(0,0,0,0.06); }
-    .logo-text { font-family: var(--font-head); font-weight: 800; font-size: 24px; color: var(--navy); letter-spacing: -0.5px; }
-    .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
-    .nav-links a { font-size: 14px; font-weight: 500; color: var(--mid); letter-spacing: 0.02em; transition: color 0.2s ease; text-transform: uppercase; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 72px; background: transparent; transition: background 0.3s ease, box-shadow 0.3s ease; }
+    nav.scrolled { background: #fff; box-shadow: 0 1px 0 var(--border); }
+    .logo-text { font-family: var(--font-head); font-weight: 800; font-size: 22px; color: var(--navy); letter-spacing: -0.5px; }
+    .logo-text .z-accent { color: var(--red); }
+    .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+    .nav-links a { font-size: 14px; font-weight: 500; color: var(--dark); letter-spacing: 0.01em; transition: color 0.2s ease; position: relative; }
+    .nav-links a::after { content: ''; position: absolute; bottom: -3px; left: 0; width: 0; height: 2px; background: var(--red); transition: width 0.25s var(--ease); }
     .nav-links a:hover { color: var(--navy); }
-    .nav-cta { background: var(--navy) !important; color: #fff !important; padding: 10px 22px; border-radius: 6px; font-weight: 600 !important; transition: background 0.2s ease !important; }
-    .nav-cta:hover { background: var(--navy-dark) !important; }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta { background: var(--navy) !important; color: #fff !important; padding: 9px 22px; border-radius: 2rem; font-weight: 500 !important; transition: background 0.2s ease, transform 0.15s !important; }
+    .nav-cta:hover { background: var(--navy-dark) !important; transform: translateY(-1px); }
+    .nav-cta::after { display: none !important; }
 
     /* HERO */
     .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 48px 80px; position: relative; overflow: hidden; }
@@ -204,7 +208,7 @@
 <body>
 
   <nav id="nav">
-    <div class="logo-text">Re<span style="color:var(--red)">📍</span>onate</div>
+    <div class="logo-text">Re<span class="z-accent">z</span>onate</div>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
@@ -221,8 +225,8 @@
     <div class="hero-inner">
       <div class="hero-left">
         <div class="hero-label">Strategic &amp; Service Design</div>
-        <h1>Design that <span class="accent">resonates.</span></h1>
-        <p class="hero-sub">We design impactful services that put innovation and people at the heart — creating simplicity amongst complexity, across public and private sectors.</p>
+        <h1>Design services that <span class="accent">resonate.</span></h1>
+        <p class="hero-sub">We design and deliver impactful services that put innovation and people at the heart — creating simplicity amongst complexity, across public and private sector.</p>
         <div class="hero-actions">
           <a href="#work" class="btn-primary">
             View our work
