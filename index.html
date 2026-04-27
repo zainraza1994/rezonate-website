@@ -45,7 +45,7 @@
     .hero-bg-grid { position: absolute; inset: 0; background-image: linear-gradient(to right, rgba(42,77,168,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(42,77,168,0.05) 1px, transparent 1px); background-size: 64px 64px; pointer-events: none; }
     .hero-accent { position: absolute; top: -200px; right: -200px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(42,77,168,0.08) 0%, transparent 70%); pointer-events: none; }
     .hero-accent-2 { position: absolute; bottom: -100px; left: -100px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(214,48,40,0.06) 0%, transparent 70%); pointer-events: none; }
-    .hero-inner { position: relative; max-width: 1200px; width: 100%; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .hero-inner { position: relative; max-width: 860px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; align-items: flex-start; }
     .hero-label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--red); margin-bottom: 24px; }
     .hero-label::before { content: ''; display: block; width: 24px; height: 2px; background: var(--red); }
     .hero h1 { font-family: var(--font-head); font-weight: 800; font-size: clamp(48px,6vw,78px); line-height: 1.02; letter-spacing: -2px; color: var(--dark); margin-bottom: 28px; }
@@ -56,13 +56,63 @@
     .btn-primary:hover { background: var(--navy-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(42,77,168,0.3); }
     .btn-secondary { display: inline-flex; align-items: center; gap: 8px; color: var(--dark); font-weight: 500; font-size: 15px; padding: 16px 0; border-bottom: 2px solid var(--dark); transition: all 0.2s ease; }
     .btn-secondary:hover { color: var(--navy); border-color: var(--navy); gap: 14px; }
-    .hero-right { display: flex; flex-direction: column; gap: 16px; }
-    .hero-stat-card { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px; display: flex; align-items: flex-start; gap: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
-    .hero-stat-card:nth-child(2) { margin-left: 32px; }
-    .hero-stat-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--light-blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 20px; }
-    .hero-stat-icon.red { background: #FEF0EF; }
-    .hero-stat-num { font-family: var(--font-head); font-weight: 800; font-size: 26px; color: var(--navy); line-height: 1; margin-bottom: 4px; }
-    .hero-stat-label { font-size: 13px; color: var(--mid); }
+    /* SCROLL JOURNEY */
+    .journey-track {
+      position: fixed;
+      left: 24px;
+      top: 0;
+      bottom: 0;
+      width: 20px;
+      z-index: 50;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .journey-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        rgba(42,77,168,0.25) 0px,
+        rgba(42,77,168,0.25) 4px,
+        transparent 4px,
+        transparent 10px
+      );
+    }
+    .journey-progress {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1px;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        var(--navy) 0px,
+        var(--navy) 4px,
+        transparent 4px,
+        transparent 10px
+      );
+      height: 0%;
+      transition: height 0.1s linear;
+    }
+    .journey-pin {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      top: 0%;
+      transition: top 0.4s var(--ease);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .journey-pin svg {
+      filter: drop-shadow(0 2px 4px rgba(214,48,40,0.3));
+    }
 
     /* CLIENTS TICKER */
     .clients-bar { background: var(--navy); padding: 18px 0; overflow: hidden; position: relative; }
@@ -188,6 +238,7 @@
 
     /* RESPONSIVE */
     @media (max-width: 900px) {
+      .journey-track { display: none; }
       nav { padding: 0 24px; }
       .nav-links { display: none; }
       section { padding: 64px 24px; }
@@ -208,6 +259,18 @@
 <body>
 
   <nav id="nav">
+
+  <!-- SCROLL JOURNEY TRACK -->
+  <div class="journey-track" id="journeyTrack">
+    <div class="journey-line"></div>
+    <div class="journey-progress" id="journeyProgress"></div>
+    <div class="journey-pin" id="journeyPin">
+      <svg width="14" height="20" viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 0C3.13 0 0 3.13 0 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#D63028"/>
+        <circle cx="7" cy="7" r="2.5" fill="white"/>
+      </svg>
+    </div>
+  </div>
     <div class="logo-text">Re<span class="z-accent">z</span>onate</div>
     <ul class="nav-links">
       <li><a href="#about">About</a></li>
@@ -218,7 +281,7 @@
   </nav>
 
   <!-- HERO -->
-  <section class="hero">
+  <section class="hero" id="home">
     <div class="hero-bg-grid"></div>
     <div class="hero-accent"></div>
     <div class="hero-accent-2"></div>
@@ -238,55 +301,7 @@
           </a>
         </div>
       </div>
-      <div class="hero-right">
-        <div class="hero-stat-card">
-          <div class="hero-stat-icon">🏛️</div>
-          <div>
-            <div class="hero-stat-num">£500m+</div>
-            <div class="hero-stat-label">Saved in fraud &amp; error for DWP through service redesign</div>
-          </div>
-        </div>
-        <div class="hero-stat-card">
-          <div class="hero-stat-icon red">⚡</div>
-          <div>
-            <div class="hero-stat-num">90 → 5 min</div>
-            <div class="hero-stat-label">Processing time reduction for DWP Kickstart Scheme</div>
-          </div>
-        </div>
-        <div class="hero-stat-card">
-          <div class="hero-stat-icon">🌐</div>
-          <div>
-            <div class="hero-stat-num">Public &amp; Private</div>
-            <div class="hero-stat-label">Deep experience across industries and sectors</div>
-          </div>
-        </div>
-      </div>
-    </div>
   </section>
-
-  <!-- CLIENTS TICKER -->
-  <div class="clients-bar">
-    <div class="clients-track">
-      <span class="client-item"><span class="dot"></span>Kainos</span>
-      <span class="client-item"><span class="dot"></span>DWP</span>
-      <span class="client-item"><span class="dot"></span>Lloyds Bank</span>
-      <span class="client-item"><span class="dot"></span>Investigo Government Solutions</span>
-      <span class="client-item"><span class="dot"></span>Co-op Bank</span>
-      <span class="client-item"><span class="dot"></span>NHS</span>
-      <span class="client-item"><span class="dot"></span>Dept for International Trade</span>
-      <span class="client-item"><span class="dot"></span>Hippo Digital</span>
-      <span class="client-item"><span class="dot"></span>EY Seren</span>
-      <span class="client-item"><span class="dot"></span>Kainos</span>
-      <span class="client-item"><span class="dot"></span>DWP</span>
-      <span class="client-item"><span class="dot"></span>Lloyds Bank</span>
-      <span class="client-item"><span class="dot"></span>Investigo Government Solutions</span>
-      <span class="client-item"><span class="dot"></span>Co-op Bank</span>
-      <span class="client-item"><span class="dot"></span>NHS</span>
-      <span class="client-item"><span class="dot"></span>Dept for International Trade</span>
-      <span class="client-item"><span class="dot"></span>Hippo Digital</span>
-      <span class="client-item"><span class="dot"></span>EY Seren</span>
-    </div>
-  </div>
 
   <!-- ABOUT -->
   <section class="about" id="about">
@@ -679,6 +694,26 @@
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 20);
     });
+
+    // SCROLL JOURNEY
+    const journeyPin      = document.getElementById('journeyPin');
+    const journeyProgress = document.getElementById('journeyProgress');
+    const sections = ['home', 'about', 'services', 'work', 'approach', 'sectors', 'contact'];
+
+    function updateJourney() {
+      const scrollTop    = window.scrollY;
+      const docHeight    = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPct    = Math.min(Math.max(scrollTop / docHeight, 0), 1);
+      // clamp pin between 5% and 95% of viewport
+      const pinTop = 5 + scrollPct * 90;
+      journeyPin.style.top      = pinTop + '%';
+      journeyProgress.style.height = pinTop + '%';
+    }
+
+    window.addEventListener('scroll', updateJourney, { passive: true });
+    updateJourney();
+
+    // FADE IN
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
@@ -688,6 +723,7 @@
       });
     }, { threshold: 0.08 });
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
     function handleSubmit(btn) {
       btn.innerHTML = '&#10003;&nbsp; Message sent!';
       btn.style.background = '#18a058';
