@@ -10,8 +10,8 @@ Use this file to get up to speed before making changes to the Rezonate website. 
 **Company:** Rezonate Ltd  
 **Role:** Founder & Lead Service Designer — contracts outside IR35  
 **Location:** United Kingdom  
-**Email:** hello@rezonate.co.uk  
-**LinkedIn:** linkedin.com/in/zainraza  
+**Email:** zainrazacoop@gmail.com 
+**LinkedIn:** https://www.linkedin.com/in/zain-raza-25296778/
 
 ---
 
