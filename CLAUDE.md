@@ -49,3 +49,11 @@ Briefly describe what changed and ask if anything needs adjusting.
 - The user does not write code — Claude writes everything
 - Keep the file named exactly `index.html` (Netlify requirement)
 - After changes are saved, the user pushes to GitHub and Netlify auto-deploys in ~30 seconds
+
+---
+
+## Design decisions made so far
+
+- **Scroll animations:** All sections (except Hero) use `.anim` class for scroll-triggered fade-up. Headings are a single block fade-up. Cards/boxes stagger using `.d1`–`.d4` delay variants (0.10s / 0.22s / 0.34s / 0.48s). Duration: 750ms. Easing: `cubic-bezier(0.16, 1, 0.3, 1)`. Travel: `44px`. Always include `prefers-reduced-motion` override setting `transition-duration: 0ms` and `transition-delay: 0ms`. Hero section excluded (visible on load). Observer: single `IntersectionObserver` (`animObserver`) at threshold 0.1.
+- **Scroll journey line:** Label accuracy is pin-position driven, not viewport-threshold driven. Each section's `.section-title` Y position is measured on load and recalculated on resize using `getBoundingClientRect().top + window.scrollY`, converted to `s.ratio = (headingY / docHeight) / contactStart`. Labels change in `updateJourney()` when `journeyPct >= s.ratio`. Guard `if (!contactStart) return` prevents division-by-zero edge case.
+- **Mobile card swiping:** Services (`.services-grid`) and Work/Portfolio (`.portfolio-grid`) sections use CSS scroll-snap horizontal scroll at `max-width: 767px`. Pattern: `display: flex; overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; padding-right: 24px` on the container. Each card: `min-width: 82vw; flex-shrink: 0; scroll-snap-align: start`. Scrollbar also hidden with `::-webkit-scrollbar { display: none }`. `.project-card` gets `grid-column: unset; grid-template-columns: unset` to neutralise featured card grid properties in flex context. No JS required.
