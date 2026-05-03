@@ -776,13 +776,13 @@
         ? Math.max(0, (contactEl.offsetTop - vh) / docHeight)
         : 0.88;
 
-      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      if (!contactStart) return;
       sectionDefs.forEach(s => {
         const el = document.getElementById(s.id);
         if (!el) return;
         const heading = el.querySelector('.section-title') || el;
         const headingY = heading.getBoundingClientRect().top + window.scrollY;
-        s.ratio = (headingY / docH) / contactStart;
+        s.ratio = (headingY / docHeight) / contactStart;
       });
 
       journeyReady = true;
@@ -804,7 +804,7 @@
       }
 
       // Fade out as contact section approaches
-      const fadeStart  = contactStart - 0.04;
+      const fadeStart  = contactStart - 0.08;
       const fadeEnd    = contactStart;
       let wrapperAlpha = 1;
       if (scrollPct >= fadeStart) {
