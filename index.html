@@ -560,7 +560,7 @@
   </section>
 
   <!-- APPROACH -->
-  <section class="approach">
+  <section class="approach" id="approach">
     <div class="section-inner">
       <div class="approach-header">
         <div>
@@ -776,6 +776,15 @@
         ? Math.max(0, (contactEl.offsetTop - vh) / docHeight)
         : 0.88;
 
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      sectionDefs.forEach(s => {
+        const el = document.getElementById(s.id);
+        if (!el) return;
+        const heading = el.querySelector('.section-title') || el;
+        const headingY = heading.getBoundingClientRect().top + window.scrollY;
+        s.ratio = (headingY / docH) / contactStart;
+      });
+
       journeyReady = true;
     }
 
@@ -795,7 +804,7 @@
       }
 
       // Fade out as contact section approaches
-      const fadeStart  = contactStart - 0.08;
+      const fadeStart  = contactStart - 0.04;
       const fadeEnd    = contactStart;
       let wrapperAlpha = 1;
       if (scrollPct >= fadeStart) {
@@ -825,8 +834,7 @@
 
       let currentLabel = '';
       for (const s of sectionDefs) {
-        const el = document.getElementById(s.id);
-        if (el && scrollTop >= el.offsetTop - window.innerHeight * 0.45) {
+        if (s.ratio !== undefined && journeyPct >= s.ratio) {
           currentLabel = s.label;
         }
       }
