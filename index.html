@@ -215,8 +215,13 @@
     .footer-logo { font-family: var(--font-head); font-weight: 800; font-size: 18px; color: rgba(255,255,255,0.35); }
 
     /* ANIMATIONS */
-    .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
-    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .anim { opacity: 0; transform: translateY(44px); transition: opacity 0.75s var(--ease), transform 0.75s var(--ease); }
+    .anim.d1 { transition-delay: 0.10s; }
+    .anim.d2 { transition-delay: 0.22s; }
+    .anim.d3 { transition-delay: 0.34s; }
+    .anim.d4 { transition-delay: 0.48s; }
+    .anim.visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) { .anim { transition-duration: 0ms !important; transition-delay: 0ms !important; } }
 
     /* RESPONSIVE */
     @media (max-width: 900px) {
@@ -856,16 +861,16 @@
     window.addEventListener('scroll', updateJourney, { passive: true });
     window.addEventListener('resize', () => { initJourney(); updateJourney(); });
 
-    // FADE IN
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
+    // SCROLL ANIMATIONS
+    const animObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
         if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('visible'), i * 100);
-          observer.unobserve(entry.target);
+          entry.target.classList.add('visible');
+          animObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.08 });
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.anim').forEach(el => animObserver.observe(el));
 
     function handleSubmit(btn) {
       btn.innerHTML = '&#10003;&nbsp; Message sent!';
