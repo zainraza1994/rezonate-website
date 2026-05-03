@@ -826,7 +826,9 @@
         const el = document.getElementById(s.id);
         if (!el) return;
         const heading = el.querySelector('.section-title') || el;
-        const headingY = heading.getBoundingClientRect().top + window.scrollY;
+        let node = heading;
+        let headingY = 0;
+        while (node) { headingY += node.offsetTop; node = node.offsetParent; }
         s.ratio = (headingY / docHeight) / contactStart;
       });
 
