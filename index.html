@@ -414,7 +414,7 @@
         <p class="section-intro">From early-stage strategy through to live delivery — we bring the right expertise at every stage of your service's life.</p>
       </div>
       <div class="services-grid">
-        <div class="service-card anim d1">
+        <div class="service-card anim">
           <div class="service-num">01</div>
           <div class="service-title">Strategic Design</div>
           <p class="service-desc">Setting the direction. We work at the strategic level to define where your service needs to go — mapping the landscape, identifying opportunity areas, and building a clear vision backed by evidence.</p>
@@ -424,7 +424,7 @@
             <span class="tag">Design leadership</span>
           </div>
         </div>
-        <div class="service-card anim d2">
+        <div class="service-card anim">
           <div class="service-num">02</div>
           <div class="service-title">Service Design</div>
           <p class="service-desc">Designing the experience. From discovery to detailed design — we map user journeys, surface pain points, ideate solutions and design services that genuinely work for the people who use and provide them.</p>
@@ -435,7 +435,7 @@
             <span class="tag">Systems thinking</span>
           </div>
         </div>
-        <div class="service-card anim d3">
+        <div class="service-card anim">
           <div class="service-num">03</div>
           <div class="service-title">End-to-End Design &amp; Delivery</div>
           <p class="service-desc">From concept to live product. We don't just design — we deliver. Leading multidisciplinary teams through the full build, testing, and launch of digital services that scale.</p>
@@ -511,7 +511,7 @@
           </div>
         </div>
 
-        <div class="project-card anim d1">
+        <div class="project-card anim">
           <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           <div class="project-sector"><span class="dot"></span>Public Sector</div>
           <div class="project-client">DWP · Hippo Digital</div>
@@ -557,7 +557,7 @@
           </div>
         </div>
 
-        <div class="project-card anim d1">
+        <div class="project-card anim">
           <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           <div class="project-sector"><span class="dot"></span>Financial Services</div>
           <div class="project-client">Major UK High Street Bank</div>
@@ -603,7 +603,7 @@
           </div>
         </div>
 
-        <div class="project-card anim d1">
+        <div class="project-card anim">
           <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
           <div class="project-sector"><span class="dot"></span>Financial Services</div>
           <div class="project-client">Building Society · EY Seren</div>
@@ -948,6 +948,19 @@
         if (!grid || !dotsEl) return;
         const cards = grid.querySelectorAll(cardSel);
         if (!cards.length) return;
+
+        // Unobserve individual cards — horizontal clipping means the peek card
+        // never reaches the 10% threshold. Reveal all cards together when the
+        // grid itself enters the viewport instead.
+        cards.forEach(card => animObserver.unobserve(card));
+        const gridRevealObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            gridRevealObserver.unobserve(entry.target);
+            cards.forEach(card => card.classList.add('visible'));
+          });
+        }, { threshold: 0.1 });
+        gridRevealObserver.observe(grid);
 
         cards.forEach((_, i) => {
           const dot = document.createElement('span');
