@@ -821,17 +821,6 @@
         ? Math.max(0, (contactEl.offsetTop - vh) / docHeight)
         : 0.88;
 
-      if (!contactStart) return;
-      sectionDefs.forEach(s => {
-        const el = document.getElementById(s.id);
-        if (!el) return;
-        const heading = el.querySelector('.section-title') || el;
-        let node = heading;
-        let headingY = 0;
-        while (node) { headingY += node.offsetTop; node = node.offsetParent; }
-        s.ratio = (headingY / docHeight) / contactStart;
-      });
-
       journeyReady = true;
     }
 
@@ -879,9 +868,14 @@
       // Update label position and text
       labelEl.style.top = pt.y + 'px';
 
+      // Label: show the last section whose heading has crossed 75% down the viewport
+      const triggerVh = window.innerHeight * 0.75;
       let currentLabel = '';
       for (const s of sectionDefs) {
-        if (s.ratio !== undefined && journeyPct >= s.ratio) {
+        const el = document.getElementById(s.id);
+        if (!el) continue;
+        const heading = el.querySelector('.section-title') || el;
+        if (heading.getBoundingClientRect().top <= triggerVh) {
           currentLabel = s.label;
         }
       }
