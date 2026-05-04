@@ -228,6 +228,8 @@
     .anim.visible { opacity: 1; transform: translateY(0); }
     @media (prefers-reduced-motion: reduce) { .anim { transition-duration: 0ms !important; transition-delay: 0ms !important; } }
 
+    .swipe-dots { display: none; }
+
     /* RESPONSIVE */
     @media (max-width: 900px) {
       #journeyWrapper { display: none; }
@@ -260,15 +262,16 @@
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
-        gap: 16px;
-        padding-bottom: 12px;
+        gap: 12px;
+        padding-bottom: 4px;
         padding-right: 24px;
         scrollbar-width: none;
         overscroll-behavior-x: contain;
       }
       .services-grid::-webkit-scrollbar { display: none; }
       .service-card {
-        min-width: 82vw;
+        width: calc(100% - 22px);
+        min-width: 0;
         flex-shrink: 0;
         scroll-snap-align: start;
       }
@@ -278,20 +281,37 @@
         overflow-x: auto;
         scroll-snap-type: x mandatory;
         -webkit-overflow-scrolling: touch;
-        gap: 16px;
-        padding-bottom: 12px;
+        gap: 12px;
+        padding-bottom: 4px;
         padding-right: 24px;
         scrollbar-width: none;
         overscroll-behavior-x: contain;
       }
       .portfolio-grid::-webkit-scrollbar { display: none; }
       .project-card {
-        min-width: 82vw;
+        width: calc(100% - 22px);
+        min-width: 0;
         flex-shrink: 0;
         scroll-snap-align: start;
         grid-column: unset;
         grid-template-columns: unset;
       }
+
+      .swipe-dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        padding: 16px 0 4px;
+      }
+      .swipe-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #d0d0d0;
+        transition: background 0.2s ease;
+        flex-shrink: 0;
+      }
+      .swipe-dot.active { background: #2A4DA8; }
     }
   </style>
 </head>
@@ -427,6 +447,7 @@
           </div>
         </div>
       </div>
+      <div class="swipe-dots" id="servicesDots"></div>
     </div>
   </section>
 
@@ -606,6 +627,7 @@
         </div>
 
       </div>
+      <div class="swipe-dots" id="portfolioDots"></div>
     </div>
   </section>
 
@@ -895,10 +917,6 @@
       }
     }
 
-    window.addEventListener('load', () => {
-      initJourney();
-      updateJourney();
-    });
     window.addEventListener('scroll', updateJourney, { passive: true });
     window.addEventListener('resize', () => { initJourney(); updateJourney(); });
 
@@ -918,6 +936,50 @@
       btn.style.background = '#18a058';
       btn.disabled = true;
     }
+
+    function initSwipeCarousels() {
+      if (window.innerWidth > 767) return;
+      [
+        { gridSel: '.services-grid', dotsId: 'servicesDots', cardSel: '.service-card' },
+        { gridSel: '.portfolio-grid', dotsId: 'portfolioDots', cardSel: '.project-card' }
+      ].forEach(({ gridSel, dotsId, cardSel }) => {
+        const grid = document.querySelector(gridSel);
+        const dotsEl = document.getElementById(dotsId);
+        if (!grid || !dotsEl) return;
+        const cards = grid.querySelectorAll(cardSel);
+        if (!cards.length) return;
+
+        cards.forEach((_, i) => {
+          const dot = document.createElement('span');
+          dot.className = 'swipe-dot' + (i === 0 ? ' active' : '');
+          dotsEl.appendChild(dot);
+        });
+
+        grid.addEventListener('scroll', () => {
+          const cardWidth = cards[0].offsetWidth + 12;
+          const idx = Math.min(Math.round(grid.scrollLeft / cardWidth), cards.length - 1);
+          dotsEl.querySelectorAll('.swipe-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+        }, { passive: true });
+
+        const nudgeObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            nudgeObserver.unobserve(entry.target);
+            setTimeout(() => {
+              grid.scrollLeft = 44;
+              setTimeout(() => grid.scrollTo({ left: 0, behavior: 'smooth' }), 380);
+            }, 500);
+          });
+        }, { threshold: 0.6 });
+        nudgeObserver.observe(grid);
+      });
+    }
+
+    window.addEventListener('load', () => {
+      initJourney();
+      updateJourney();
+      initSwipeCarousels();
+    });
   </script>
 </body>
 </html>
