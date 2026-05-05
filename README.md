@@ -62,19 +62,21 @@ The site serves two purposes:
 |---|---|
 | Built with | Single HTML file (`index.html`) — HTML, CSS, vanilla JavaScript |
 | Code editor | VS Code (user is new to coding — Claude writes all code) |
-| Version control | GitHub — repo: `rezonate-website` |
-| Hosting | Netlify — live at `rezonate.netlify.app` |
-| Deployment | GitHub linked to Netlify. Push to GitHub → Netlify auto-deploys in ~30 seconds |
+| Version control | GitHub — repo: `rezonate-website` (user: `zainraza1994`) |
+| Hosting | GitHub Pages — free, served directly from the `main` branch |
+| Deployment | Push to `main` → GitHub Pages auto-deploys in ~30–60 seconds |
+| Live URL | `https://zainraza1994.github.io/rezonate-website/` (until custom domain is set) |
 
 **Update workflow:**
 1. User tells Claude what to change
-2. Claude produces updated `index.html`
-3. User goes to GitHub repo → Add file → Upload files → replaces `index.html`
-4. Netlify auto-deploys
+2. Claude edits `index.html` directly using the Edit tool
+3. Claude commits via terminal (`git add index.html && git commit -m "..."`)
+4. User clicks **Sync** in VS Code to push to GitHub
+5. GitHub Pages auto-deploys — live in ~30–60 seconds
 
-**Critical:** The file must always be named exactly `index.html` — Netlify won't find it otherwise.
+**Critical:** The file must always be named exactly `index.html` and must live in the root of the `main` branch — GitHub Pages won't find it otherwise.
 
-**Important for Claude:** Always ask the user to upload the current `index.html` at the start of a new session before making any changes — the file in memory here may be behind the live version.
+**Important for Claude:** Always read the current `index.html` from disk at the start of a session before making any changes — work from the file on disk, not from memory.
 
 ---
 
@@ -216,7 +218,7 @@ The old "Sectors" section has been replaced with a "Trusted by" client logo stri
 - [ ] **Contact form** — replace with a real working form (Netlify Forms or Formspree)
 - [ ] **Real contact details** — add real email address and LinkedIn URL (currently placeholders)
 - [ ] **Hero** — decide what goes where the stat tiles used to be
-- [ ] **Custom domain** — currently `rezonate.netlify.app`
+- [ ] **Custom domain** — buy a domain (e.g. `rezonate.co.uk`), add it in GitHub repo Settings → Pages → Custom domain, then set a CNAME DNS record at the registrar pointing to `zainraza1994.github.io`
 - [ ] **Mobile navigation** — hamburger menu (nav links currently hidden on mobile)
 
 ---
