@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <!-- Navy background with rounded corners -->
-  <rect width="512" height="512" rx="96" fill="#2A4DA8"/>
+  <rect width="512" height="512" fill="#2A4DA8"/>
 
   <!-- White bold R -->
   <text x="62" y="390"
