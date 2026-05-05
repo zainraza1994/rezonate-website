@@ -48,7 +48,9 @@ Briefly describe what changed and ask if anything needs adjusting.
 - Section labels are always red — no per-section colour overrides
 - The user does not write code — Claude writes everything
 - Keep the file named exactly `index.html`
-- After changes are saved, commit via terminal (`git add index.html && git commit -m "..."`) then the user clicks **Sync** in VS Code to push — GitHub Pages deploys automatically
+- After changes are saved, commit via terminal (`git add index.html && git commit -m "..."`) then the user clicks **Sync** in VS Code to push — GitHub Pages deploys automatically in ~1–3 minutes
+- Live site is at `https://rezonatedesign.co.uk` — registered on Cloudflare, DNS-only mode (grey cloud). Do not change DNS proxy settings.
+- A `CNAME` file in the repo root contains `rezonatedesign.co.uk` — never delete or overwrite it
 
 ---
 

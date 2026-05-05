@@ -64,15 +64,19 @@ The site serves two purposes:
 | Code editor | VS Code (user is new to coding — Claude writes all code) |
 | Version control | GitHub — repo: `rezonate-website` (user: `zainraza1994`) |
 | Hosting | GitHub Pages — free, served directly from the `main` branch |
-| Deployment | Push to `main` → GitHub Pages auto-deploys in ~30–60 seconds |
-| Live URL | `https://zainraza1994.github.io/rezonate-website/` (until custom domain is set) |
+| Deployment | Push to `main` → GitHub Pages auto-deploys in ~1–3 minutes |
+| Custom domain | `rezonatedesign.co.uk` — registered on Cloudflare Registrar (~£5.50/yr, no renewal hikes) |
+| Live URL | `https://rezonatedesign.co.uk` |
+| DNS | Cloudflare (DNS-only mode — grey cloud, not proxied — so GitHub Pages handles HTTPS) |
+| CNAME file | `/CNAME` in repo root contains `rezonatedesign.co.uk` — do not delete |
 
 **Update workflow:**
 1. User tells Claude what to change
 2. Claude edits `index.html` directly using the Edit tool
 3. Claude commits via terminal (`git add index.html && git commit -m "..."`)
 4. User clicks **Sync** in VS Code to push to GitHub
-5. GitHub Pages auto-deploys — live in ~30–60 seconds
+5. GitHub Pages auto-deploys — live in ~1–3 minutes
+6. Hard refresh in browser (`Cmd+Shift+R`) if the old version shows
 
 **Critical:** The file must always be named exactly `index.html` and must live in the root of the `main` branch — GitHub Pages won't find it otherwise.
 
@@ -218,7 +222,7 @@ The old "Sectors" section has been replaced with a "Trusted by" client logo stri
 - [ ] **Contact form** — replace with a real working form (Netlify Forms or Formspree)
 - [ ] **Real contact details** — add real email address and LinkedIn URL (currently placeholders)
 - [ ] **Hero** — decide what goes where the stat tiles used to be
-- [ ] **Custom domain** — buy a domain (e.g. `rezonate.co.uk`), add it in GitHub repo Settings → Pages → Custom domain, then set a CNAME DNS record at the registrar pointing to `zainraza1994.github.io`
+- [x] **Custom domain** — `rezonatedesign.co.uk` live. Registered on Cloudflare. DNS A records + CNAME set. CNAME file in repo root. HTTPS enforced via GitHub Pages.
 - [ ] **Mobile navigation** — hamburger menu (nav links currently hidden on mobile)
 
 ---
@@ -226,14 +230,14 @@ The old "Sectors" section has been replaced with a "Trusted by" client logo stri
 ## How to continue
 
 1. Read this whole file first
-2. Ask the user to upload the latest `index.html` — always work from the file they provide, not from memory
+2. Read the current `index.html` from disk at the start of each session — never work from memory
 3. Write all code — the user is new to coding and does not write any code themselves
-4. Always produce a complete updated `index.html` for the user to download and upload to GitHub
+4. Claude edits `index.html` directly using the Edit tool, commits via terminal, user clicks Sync in VS Code
 5. Ask design questions before building when a decision needs to be made
 6. When embedding logos: convert uploaded image files to base64 using Python, embed as `data:image/...;base64,...` in the HTML so there are no external dependencies
 
 ---
 
-*Last updated: end of session 2*
+*Last updated: May 2026*
 # rezonate-website
 Rezonate Ltd Website
