@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Navy background with rounded corners -->
+  <rect width="512" height="512" rx="96" fill="#2A4DA8"/>
+
+  <!-- White bold R -->
+  <text x="62" y="390"
+        font-family="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif"
+        font-weight="800"
+        font-size="340"
+        fill="white">R</text>
+
+  <!-- Red location pin (path from 14×20 viewBox, scaled ×11, placed top-right) -->
+  <g transform="translate(332, 72) scale(11)">
+    <path d="M7 0C3.13 0 0 3.13 0 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#D63028"/>
+    <circle cx="7" cy="7" r="2.5" fill="white"/>
+  </g>
+</svg>
