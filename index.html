@@ -204,6 +204,11 @@
     .form-textarea { min-height: 120px; }
     .form-submit { display: inline-flex; align-items: center; gap: 10px; background: var(--red); color: #fff; font-family: var(--font-body); font-weight: 600; font-size: 15px; padding: 16px 32px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.25s var(--ease); align-self: flex-start; }
     .form-submit:hover { background: #bf2720; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(214,48,40,0.4); }
+    .form-input.invalid, .form-textarea.invalid { border-color: rgba(214,48,40,0.7); }
+    .form-error { font-size: 12px; color: #D63028; margin-top: -4px; min-height: 16px; }
+    .form-label .req { color: var(--red); margin-left: 2px; }
+    .contact-item-val a { color: inherit; text-decoration: none; }
+    .contact-item-val a:hover { text-decoration: underline; }
 
     /* FOOTER */
     footer { background: var(--dark); border-top: 1px solid rgba(255,255,255,0.06); padding: 28px 48px; display: flex; justify-content: space-between; align-items: center; }
@@ -647,14 +652,14 @@
             <div class="contact-item-icon">✉️</div>
             <div>
               <div class="contact-item-label">Email</div>
-              <div class="contact-item-val">hello@rezonate.co.uk</div>
+              <div class="contact-item-val"><a href="mailto:zainrazacoop@gmail.com">zainrazacoop@gmail.com</a></div>
             </div>
           </div>
           <div class="contact-item">
             <div class="contact-item-icon">🔗</div>
             <div>
               <div class="contact-item-label">LinkedIn</div>
-              <div class="contact-item-val">linkedin.com/in/zainraza</div>
+              <div class="contact-item-val"><a href="https://www.linkedin.com/in/zain-raza-25296778/" target="_blank" rel="noopener noreferrer">linkedin.com/in/zain-raza-25296778</a></div>
             </div>
           </div>
           <div class="contact-item">
@@ -669,25 +674,28 @@
       <div class="contact-form anim d3">
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">First name</label>
-            <input type="text" class="form-input" placeholder="Jane" />
+            <label class="form-label">First name<span class="req">*</span></label>
+            <input type="text" id="field-fname" class="form-input" placeholder="Jane" />
+            <div class="form-error" id="err-fname"></div>
           </div>
           <div class="form-group">
             <label class="form-label">Last name</label>
-            <input type="text" class="form-input" placeholder="Smith" />
+            <input type="text" id="field-lname" class="form-input" placeholder="Smith" />
           </div>
         </div>
         <div class="form-group">
           <label class="form-label">Organisation</label>
-          <input type="text" class="form-input" placeholder="Company name" />
+          <input type="text" id="field-org" class="form-input" placeholder="Company name" />
         </div>
         <div class="form-group">
-          <label class="form-label">Email address</label>
-          <input type="email" class="form-input" placeholder="jane@company.com" />
+          <label class="form-label">Email address<span class="req">*</span></label>
+          <input type="email" id="field-email" class="form-input" placeholder="jane@company.com" />
+          <div class="form-error" id="err-email"></div>
         </div>
         <div class="form-group">
-          <label class="form-label">What are you looking for?</label>
-          <textarea class="form-textarea" placeholder="Tell us a bit about your project or opportunity..."></textarea>
+          <label class="form-label">What are you looking for?<span class="req">*</span></label>
+          <textarea id="field-message" class="form-textarea" placeholder="Tell us a bit about your project or opportunity..."></textarea>
+          <div class="form-error" id="err-message"></div>
         </div>
         <button class="form-submit" onclick="handleSubmit(this)">
           Send message
@@ -866,9 +874,72 @@
     document.querySelectorAll('.anim').forEach(el => animObserver.observe(el));
 
     function handleSubmit(btn) {
-      btn.innerHTML = '&#10003;&nbsp; Message sent!';
-      btn.style.background = '#18a058';
+      const fname   = document.getElementById('field-fname');
+      const lname   = document.getElementById('field-lname');
+      const org     = document.getElementById('field-org');
+      const email   = document.getElementById('field-email');
+      const message = document.getElementById('field-message');
+
+      // Clear previous errors
+      ['fname','email','message'].forEach(function(f) {
+        document.getElementById('err-' + f).textContent = '';
+        document.getElementById('field-' + f).classList.remove('invalid');
+      });
+
+      var valid = true;
+      if (!fname.value.trim()) {
+        document.getElementById('err-fname').textContent = 'First name is required.';
+        fname.classList.add('invalid');
+        valid = false;
+      }
+      if (!email.value.trim()) {
+        document.getElementById('err-email').textContent = 'Email address is required.';
+        email.classList.add('invalid');
+        valid = false;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+        document.getElementById('err-email').textContent = 'Please enter a valid email address.';
+        email.classList.add('invalid');
+        valid = false;
+      }
+      if (!message.value.trim()) {
+        document.getElementById('err-message').textContent = "Please tell us what you're looking for.";
+        message.classList.add('invalid');
+        valid = false;
+      }
+
+      if (!valid) return;
+
+      var arrowSvg = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
       btn.disabled = true;
+      btn.innerHTML = 'Sending…';
+
+      fetch('https://formspree.io/f/mwvyoaad', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          'first-name':   fname.value.trim(),
+          'last-name':    lname.value.trim(),
+          'organisation': org.value.trim(),
+          'email':        email.value.trim(),
+          'message':      message.value.trim()
+        })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.ok) {
+          btn.innerHTML = '&#10003;&nbsp; Message sent!';
+          btn.style.background = '#18a058';
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = 'Send message ' + arrowSvg;
+          document.getElementById('err-message').textContent = 'Something went wrong — please try again or email directly.';
+        }
+      })
+      .catch(function() {
+        btn.disabled = false;
+        btn.innerHTML = 'Send message ' + arrowSvg;
+        document.getElementById('err-message').textContent = 'Something went wrong — please try again or email directly.';
+      });
     }
 
     function initSwipeCarousels() {
