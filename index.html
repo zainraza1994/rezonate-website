@@ -141,11 +141,15 @@
     .service-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--navy); transform: scaleX(0); transform-origin: left; transition: transform 0.3s var(--ease); }
     .service-card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,0.08); }
     .service-card:hover::after { transform: scaleX(1); }
-    .service-num { font-family: var(--font-head); font-weight: 800; font-size: 48px; color: var(--light-blue); line-height: 1; margin-bottom: 24px; letter-spacing: -2px; }
+    .service-num { font-family: var(--font-head); font-weight: 800; font-size: 48px; color: var(--light-blue); line-height: 1; margin-bottom: 24px; letter-spacing: -2px; transition: color 0.3s var(--ease); }
     .service-title { font-family: var(--font-head); font-weight: 700; font-size: 20px; color: var(--dark); margin-bottom: 14px; }
     .service-desc { font-size: 15px; color: var(--mid); line-height: 1.7; }
     .service-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
-    .tag { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; padding: 5px 10px; border-radius: 4px; background: var(--light-blue); color: var(--navy); }
+    .tag { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; padding: 5px 10px; border-radius: 4px; background: var(--light-blue); color: var(--navy); transition: background 0.3s var(--ease), color 0.3s var(--ease); }
+    .service-card:hover .service-num,
+    .service-card.is-active .service-num { color: var(--navy); }
+    .service-card:hover .tag,
+    .service-card.is-active .tag { background: var(--navy); color: #fff; }
 
     /* PORTFOLIO — horizontal-scroll animated cards */
     .portfolio { background: var(--cream); padding-top: 0; }
@@ -1630,11 +1634,14 @@
             dot.className = 'swipe-dot' + (i === 0 ? ' active' : '');
             sDots.appendChild(dot);
           });
-          sGrid.addEventListener('scroll', () => {
+          const setActiveCard = () => {
             const cw = sCards[0].offsetWidth + 12;
             const idx = Math.min(Math.round(sGrid.scrollLeft / cw), sCards.length - 1);
             sDots.querySelectorAll('.swipe-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
-          }, { passive: true });
+            sCards.forEach((c, i) => c.classList.toggle('is-active', i === idx));
+          };
+          sCards[0].classList.add('is-active');
+          sGrid.addEventListener('scroll', setActiveCard, { passive: true });
           const nudge = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
               if (!entry.isIntersecting) return;
