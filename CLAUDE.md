@@ -85,10 +85,11 @@ Each card has:
 
 ## Approach section — current state (as of May 2026)
 
-The `.approach` section is a **V3 pinned scrollytelling** experience (`height: 450vh`). The inner `.approach-stage` is `position: sticky; top: 0; height: 100vh` and pins while the user scrolls through 4 chapters.
+The `.approach` section is a **V3 pinned scrollytelling** experience (`height: 220vh`). The inner `.approach-stage` is `position: sticky; top: 0; height: 100vh` and pins while the user scrolls through 4 steps.
 
-- **Meta bar:** Section label ("How we work") + chapter counter (`01 · Chapter 1 of 4`) + 4 red progress segments
+- **Meta bar:** Section label ("How we work") + step counter (`01 · Step 1 of 4`) + 4 red progress segments. The label says "Step", not "Chapter".
+- **Intro paragraph:** A persistent `.approach-intro` paragraph sits between the meta bar and the body at all times — it does not change as steps scroll. Text: "We use a trusted design methodology throughout every engagement — ensuring we design the right thing, then design it right. Collaborative, evidence-based, and always people-centred." Styled: DM Sans, 19px, `rgba(247,246,242,0.68)`, `max-width: 500px`, `margin-bottom: 28px`. Visible on both desktop and mobile.
 - **Body:** Two-column grid. Left: giant numeral (01–04). Right: title, description, pill shortcuts for jumping
-- **Background shape:** Abstract SVG (`data-shape="0"–"3"`) swaps per chapter — radar / rectangles / overlapping circles / triangle
-- **JS:** `initApproachScrollytelling()` drives chapter swaps on scroll. Mobile (≤ 900px): section collapses to `height: auto`, chapters stack vertically as cards, pinning disabled. Pills hidden on mobile.
-- **Chapter copy:** 01 Discover / 02 Define / 03 Develop / 04 Deliver
+- **Background shape:** Abstract SVG (`data-shape="0"–"3"`) swaps per step — radar / rectangles / overlapping circles / triangle
+- **JS:** `initApproachScrollytelling()` drives step swaps on scroll. Mobile (≤ 900px): section collapses to `height: auto`, steps stack vertically as cards, pinning disabled. Pills hidden on mobile.
+- **Step copy:** 01 Discover / 02 Define / 03 Develop / 04 Deliver

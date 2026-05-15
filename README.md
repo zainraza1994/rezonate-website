@@ -192,12 +192,13 @@ The old "Sectors" section has been replaced with a "Trusted by" client logo stri
 ## How we work / Approach section — current state (V3)
 
 - **Background:** Black (`#000`)
-- **Layout:** Pinned scrollytelling — section is `450vh` tall. Inner `.approach-stage` is `position: sticky; top: 0; height: 100vh`.
-- **Meta bar:** "How we work" label + chapter counter (`01 · Chapter 1 of 4`) + 4 red progress segments
-- **Chapters:** 4 crossfading `<article class="approach-chapter">` elements — 01 Discover / 02 Define / 03 Develop / 04 Deliver. Active chapter fades in; inactive is `opacity: 0; transform: translateY(28px)`.
-- **Background shapes:** Abstract SVG swaps per chapter — radar rings (Discover), nested rectangles (Define), overlapping circles (Develop), triangle (Deliver).
-- **Pills:** Row of 4 shortcut buttons inside each chapter for jumping to a specific chapter.
-- **Mobile (≤ 900px):** Pinning disabled. Section collapses to `height: auto`. Chapters stack vertically as cards with a top border. Pills and scroll hint hidden.
+- **Layout:** Pinned scrollytelling — section is `220vh` tall. Inner `.approach-stage` is `position: sticky; top: 0; height: 100vh`.
+- **Meta bar:** "How we work" label + step counter (`01 · Step 1 of 4`) + 4 red progress segments. Label says "Step", not "Chapter".
+- **Intro paragraph:** Persistent `.approach-intro` below the meta bar — always visible, never changes between steps. Text: "We use a trusted design methodology throughout every engagement — ensuring we design the right thing, then design it right. Collaborative, evidence-based, and always people-centred." DM Sans, 19px, cream 68% opacity, max-width 500px. Shown on desktop and mobile.
+- **Steps:** 4 crossfading `<article class="approach-chapter">` elements — 01 Discover / 02 Define / 03 Develop / 04 Deliver. Active step fades in; inactive is `opacity: 0; transform: translateY(28px)`.
+- **Background shapes:** Abstract SVG swaps per step — radar rings (Discover), nested rectangles (Define), overlapping circles (Develop), triangle (Deliver).
+- **Pills:** Row of 4 shortcut buttons inside each step for jumping to a specific step.
+- **Mobile (≤ 900px):** Pinning disabled. Section collapses to `height: auto`. Steps stack vertically as cards with a top border. Pills and scroll hint hidden.
 
 ---
 
