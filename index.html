@@ -404,26 +404,30 @@
       .services-grid { grid-template-columns: 1fr; }
       .services-header, .portfolio-header { flex-direction: column; align-items: flex-start; }
       .portfolio-grid { grid-template-columns: 1fr; }
-      /* Approach V3 mobile — collapse to scroll-card list, no pinning */
-      .approach { height: auto; padding: 64px 0; }
-      .approach-stage { position: relative; height: auto; padding: 0 24px; overflow: visible; }
-      .approach-meta { flex-direction: column; align-items: flex-start; gap: 18px; margin-bottom: 22px; }
-      .approach-progress { width: 100%; }
-      .approach-body { display: block; }
-      .approach-shape { display: none; }
+      /* Approach V3 mobile — full-screen sticky scrollytelling (one step at a time) */
+      .approach { height: 300vh; height: 300svh; padding: 0; }
+      .approach-stage { position: sticky; top: 72px; height: calc(100vh - 72px); height: calc(100svh - 72px); padding: 14px 24px 20px; overflow: hidden; }
+      .approach-stage-inner { height: 100%; }
+      .approach-meta { flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 6px; }
+      .approach-progress { width: clamp(100px, 35vw, 160px); }
+      .approach-intro { font-size: 13px; line-height: 1.5; margin-bottom: 10px; }
+      .approach-body { flex: 1; display: block; position: relative; min-height: 0; }
+      .approach-shape { display: flex; opacity: 0.2; }
+      .approach-shape svg { width: 85%; max-width: 260px; }
       .approach-chapter {
-        position: relative; inset: auto;
-        opacity: 1; transform: none; pointer-events: auto;
-        grid-template-columns: 1fr; gap: 4px;
-        padding: 28px 0; border-top: 1px solid rgba(255,255,255,0.1);
+        position: absolute; inset: 0;
+        display: flex; flex-direction: column; justify-content: flex-end;
+        opacity: 0; transform: translateY(20px);
+        pointer-events: none;
+        padding-bottom: 36px;
       }
-      .approach-chapter:first-of-type { border-top: none; }
-      .approach-num { font-size: 96px; letter-spacing: -3px; margin-bottom: 4px; opacity: 0.6; }
-      .approach-chapter.active .approach-num { opacity: 1; }
-      .approach-title { font-size: 32px; margin-bottom: 12px; }
-      .approach-desc { font-size: 15px; }
+      .approach-chapter.active { opacity: 1; transform: translateY(0); pointer-events: auto; }
+      .approach-num { font-size: 116px; letter-spacing: -5px; line-height: 0.84; margin-bottom: 4px; opacity: 0.85; align-self: flex-start; }
+      .approach-title { font-size: 30px; letter-spacing: -1px; margin-bottom: 8px; }
+      .approach-desc { font-size: 14px; line-height: 1.5; }
       .approach-pills { display: none; }
-      .approach-scrollhint { display: none; }
+      .approach-scrollhint { display: inline-flex; margin-top: 12px; }
+      .approach-chapter[data-chapter="3"] .approach-scrollhint { display: none; }
       .logo-strip { grid-template-columns: 1fr 1fr; }
       .client-logo:nth-child(2) { border-right: none; }
       .client-logo:nth-child(n+3) { border-top: 1px solid var(--border); }
@@ -1810,7 +1814,6 @@
       }
 
       function onScroll() {
-        if (window.innerWidth <= 900) return; // mobile collapses, no pinning
         const rect = section.getBoundingClientRect();
         const totalScroll = section.offsetHeight - window.innerHeight;
         const scrolled = Math.min(Math.max(-rect.top, 0), totalScroll);
@@ -1835,7 +1838,7 @@
         progress.forEach((p, k) => p.style.setProperty('--p', k <= best ? 1 : 0));
       }
 
-      const handler = () => { onScroll(); onScrollMobile(); };
+      const handler = () => { onScroll(); };
       window.addEventListener('scroll', handler, { passive: true });
       window.addEventListener('resize', handler);
       handler();
