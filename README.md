@@ -90,8 +90,8 @@ The site serves two purposes:
 2. **Hero** — Full viewport height. Left-aligned. Label, H1, subtitle, two CTA buttons.
 3. **About** — Dark (`#0C0C0C`) background. Brand mission, 4 design pillars.
 4. **Services** — Cream background. 3 service cards (01, 02, 03).
-5. **Portfolio / Work** — Cream background. 7 project cards including 1 featured full-width card.
-6. **How we work / Approach** — **Black (`#000`)** background. 4-step process.
+5. **Portfolio / Work** — Cream background. 6 project cards in a horizontal-scroll rail (desktop + mobile). Prev/next controls + counter on desktop; dot indicators on mobile. Each card has a thematic inline SVG animation.
+6. **How we work / Approach** — **Black (`#000`)** background. V3 pinned scrollytelling — `450vh` tall section, sticky inner stage, 4 crossfading chapters (Discover / Define / Develop / Deliver) with morphing background shapes and progress segments.
 7. **Trusted by** — Cream background. Client logo strip (4 clients).
 8. **Contact** — Dark background. Contact details + enquiry form.
 9. **Footer** — Dark background. Copyright + text logo.
@@ -137,42 +137,40 @@ From concept to live product. Leading multidisciplinary teams through full build
 
 ## Portfolio projects — current state on site
 
-### 1. Universal Credit — Fraud & Error ⭐ FEATURED
-**Client:** Department for Work and Pensions  
-**Sector:** Public Sector  
-**Description:** Provided service design leadership for fraud and error in Universal Credit, including leading a multidisciplinary team to design a scalable, efficient fraud-prevention service. The work leveraged AI and innovation to proactively target risk, all grounded in user-centred thinking across a complex, high-stakes environment.  
-**Stats:** £500m+ saved · £1.4bn target this year · 5,000+ agents · Multi-dept aligned  
-**Tags:** Design Leadership · Service Design · UX Research · UX Design · AI Integration
+All 6 cards are in a horizontal-scroll rail. No featured card. Each has a `.project-diagram` SVG animation.
 
-### 2. Bus Open Data Service (BODS)
-**Client:** Kainos  
-**Sector:** Public Sector / Transport  
-**Description:** Commissioned to reimagine BODS — transforming it from a purely data-focused platform into a user-centred experience. Facilitated collaboration across government, data and technical teams.
+### 1. Universal Credit Fraud & Error
+**Client:** Department for Work and Pensions | **Sector:** Public Sector  
+**Tags:** Design Leadership · Service Design · E2E Design · AI Integration  
+**Stats:** £500m+ saved · 5,000+ agents using the service  
+**Diagram:** AI scan beam sweeping a grid of claim records; anomaly flagged with red pulse
 
-### 3. Kickstart Scheme — Youth Employment
-**Client:** DWP / Hippo Digital  
-**Sector:** Public Sector  
-**Stats:** 90 → 5 min processing time · 50 employer & agent interviews
+### 2. Automated Vehicles Act Data Service
+**Client:** Kainos | **Sector:** Public Sector  
+**Tags:** Service Design · GDS Assessment · AI Tools  
+**Diagram:** Car on curved road with sensor pings; data uplink dots to DATA SVC hub
 
-### 4. An 'Investor First' Experience
-**Client:** Department for International Trade  
-**Sector:** Government / Trade  
-**Stats:** 50 investor interviews · 8 investor segments defined
+### 3. DSIT — Matrix Programme
+**Client:** Investigo Government Solutions | **Sector:** HR/Finance  
+**Tags:** Design Leadership · Transformation · Op Model  
+**Diagram:** 3×4 dept/function matrix; cells flash navy/red in sequence
 
-### 5. Redesigning Business Banking
-**Client:** Major UK High Street Bank (anonymised)  
-**Sector:** Financial Services  
-**Stats:** 15 customer interviews · increased website traffic
+### 4. Bus Open Data Service (BODS)
+**Client:** Kainos | **Sector:** Public Sector  
+**Tags:** Service Design · Service Mapping  
+**Diagram:** Bus moving along route with named stops; animated dashes + live ETA panel
 
-### 6. Re-imagining Insurance Claims
-**Client:** Top UK Insurer (anonymised)  
-**Sector:** Insurance  
-**Stats:** 60 user interviews · 1,000 survey participants
+### 5. Kickstart Scheme — Youth Employment
+**Client:** Department for Work and Pensions | **Sector:** Public Sector  
+**Tags:** Service Design · E2E Design/Delivery  
+**Stats:** ↓ 94% processing time · ↑ Vacancies  
+**Diagram:** BEFORE/AFTER bars (90 min vs 5 min) with animated stopwatches + ↓ 94% stat
 
-### 7. A Leading Mobile Savings Proposition
-**Client:** Building Society / EY Seren  
-**Sector:** Financial Services  
-**Stats:** 14 customer interviews · 6 personas developed
+### 6. Re-imagine Branch Services
+**Client:** Lloyds Bank | **Sector:** Financial Services  
+**Tags:** User Testing · Service Design · Transformation  
+**Stats:** ↑ Digital awareness · ↓ Branch footfall  
+**Diagram:** Dual sparklines — branch (red, declining) and digital (navy, rising) crossing
 
 ---
 
@@ -191,12 +189,15 @@ The old "Sectors" section has been replaced with a "Trusted by" client logo stri
 
 ---
 
-## How we work / Approach section — current state
+## How we work / Approach section — current state (V3)
 
 - **Background:** Black (`#000`)
-- **Intro text:** "We use a trusted design methodology throughout every engagement — ensuring we design the right thing, then design it right. Collaborative, evidence-based, and always people-centred."
-- **Step cards:** 4 steps — Discover, Define, Develop, Deliver. Boxes at `rgba(255,255,255,0.08)` opacity with `rgba(255,255,255,0.18)` border. Numbers at `rgba(255,255,255,0.18)`.
-- **Layout:** Header uses `align-items: flex-end` so intro text aligns to bottom of heading (consistent with other sections).
+- **Layout:** Pinned scrollytelling — section is `450vh` tall. Inner `.approach-stage` is `position: sticky; top: 0; height: 100vh`.
+- **Meta bar:** "How we work" label + chapter counter (`01 · Chapter 1 of 4`) + 4 red progress segments
+- **Chapters:** 4 crossfading `<article class="approach-chapter">` elements — 01 Discover / 02 Define / 03 Develop / 04 Deliver. Active chapter fades in; inactive is `opacity: 0; transform: translateY(28px)`.
+- **Background shapes:** Abstract SVG swaps per chapter — radar rings (Discover), nested rectangles (Define), overlapping circles (Develop), triangle (Deliver).
+- **Pills:** Row of 4 shortcut buttons inside each chapter for jumping to a specific chapter.
+- **Mobile (≤ 900px):** Pinning disabled. Section collapses to `height: auto`. Chapters stack vertically as cards with a top border. Pills and scroll hint hidden.
 
 ---
 
@@ -217,7 +218,7 @@ The old "Sectors" section has been replaced with a "Trusted by" client logo stri
 
 ## Things still to do / not yet decided
 
-- [ ] **Selected Work section** — review and update content/copy on the remaining 6 project cards (cards 2–7). May need to revisit descriptions, stats and tags.
+- [x] **Selected Work section** — redesigned as a horizontal-scroll rail with thematic SVG animations. 6 cards, desktop controls, mobile dot indicators.
 - [ ] **Trusted by logos** — embed proper files for Kainos (replace hotlink), Lloyds Banking Group, and Investigo Government Solutions
 - [ ] **Contact form** — replace with a real working form (Netlify Forms or Formspree)
 - [ ] **Real contact details** — add real email address and LinkedIn URL (currently placeholders)
