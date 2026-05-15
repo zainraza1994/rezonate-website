@@ -162,7 +162,7 @@
     .portfolio-controls .pc-progress::before {
       content: ''; position: absolute; top: 0; left: 0; height: 100%;
       width: var(--pc-w, 16%); background: var(--navy);
-      transform: translateX(var(--pc-x, 0)); transition: width 0.3s var(--ease), transform 0.3s var(--ease);
+      transform: translateX(var(--pc-x, 0));
       border-radius: 2px;
     }
     .portfolio-controls .pc-count { font-size: 12px; font-weight: 600; color: var(--mid); letter-spacing: 0.06em; font-variant-numeric: tabular-nums; min-width: 44px; }
@@ -1729,7 +1729,12 @@
         if (e.key === 'ArrowRight') { e.preventDefault(); pGrid.scrollBy({ left:  cardStep(), behavior: 'smooth' }); }
       });
 
-      pGrid.addEventListener('scroll', updateState, { passive: true });
+      let rafPending = false;
+      pGrid.addEventListener('scroll', () => {
+        if (rafPending) return;
+        rafPending = true;
+        requestAnimationFrame(() => { updateState(); rafPending = false; });
+      }, { passive: true });
       window.addEventListener('resize', updateState);
       updateState();
 
